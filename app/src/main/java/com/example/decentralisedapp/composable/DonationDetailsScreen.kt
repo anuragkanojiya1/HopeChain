@@ -1,4 +1,4 @@
-package com.example.decentralisedapp
+package com.example.decentralisedapp.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -33,10 +32,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.rememberAsyncImagePainter
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.decentralisedapp.R
+import com.example.decentralisedapp.navigation.Screen
 
 @Composable
-fun DonationDetailsScreen() {
+fun DonationDetailsScreen(navController: NavController) {
+
+    val campaignInfoArgs = navController.currentBackStackEntry?.arguments
+    val title = campaignInfoArgs?.getString("title") ?: ""
+    val balance = campaignInfoArgs?.getLong("balance") ?: 0L
+    val description = campaignInfoArgs?.getString("description") ?: ""
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -76,7 +84,7 @@ fun DonationDetailsScreen() {
 
         // Title
         Text(
-            text = "The Ocean Cleanup",
+            text = title,
             color = Color(0xFF181411),
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
@@ -85,7 +93,7 @@ fun DonationDetailsScreen() {
 
         // Description
         Text(
-            text = "The Ocean Cleanup is a non-profit organization that develops advanced technologies to rid the world's oceans of plastic.",
+            text = description,
             color = Color(0xFF181411),
             fontSize = 16.sp,
             modifier = Modifier.padding(vertical = 8.dp)
@@ -171,7 +179,9 @@ fun DonationDetailsScreen() {
 
         // Donate Button
         Button(
-            onClick = { },
+            onClick = {
+                navController.navigate("donation_screen/${title}/${balance}/${description}")
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEC7113)),
             modifier = Modifier
                 .fillMaxWidth()
@@ -191,5 +201,5 @@ fun DonationDetailsScreen() {
 @Preview(showBackground = true)
 @Composable
 fun DonationDetailsScreenPreview(){
-    DonationDetailsScreen()
+    DonationDetailsScreen(navController = rememberNavController())
 }

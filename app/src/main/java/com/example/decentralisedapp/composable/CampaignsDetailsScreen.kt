@@ -1,4 +1,4 @@
-package com.example.decentralisedapp
+package com.example.decentralisedapp.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.runtime.*
@@ -14,11 +14,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.decentralisedapp.CampaignList
+import com.example.decentralisedapp.viewmodels.DappViewModel
+import com.example.decentralisedapp.SignatureInfo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.collections.get
 
 @Composable
-fun CampaignDetailsScreen(dappViewModel: DappViewModel = viewModel()) {
+fun CampaignDetailsScreen(dappViewModel: DappViewModel, navController: NavController) {
     val scope = rememberCoroutineScope()
     val campaignData = remember { mutableStateOf<List<CampaignInfo>>(emptyList()) }
     val signaturesData = remember { mutableStateMapOf<String, List<SignatureInfo>>() }
@@ -26,36 +32,32 @@ fun CampaignDetailsScreen(dappViewModel: DappViewModel = viewModel()) {
     LaunchedEffect(Unit) {
         // Populate campaign data initially
         CampaignList.campaignList.keys.take(10).forEach { campaignName ->
-            val publicKey = CampaignList.campaignList[campaignName]!!
+            val campaign = CampaignList.campaignList[campaignName]
+            campaign?.let {
+                val publicKey = it.address
 
-            // Fetch balance for each campaign
-            dappViewModel.viewTotalDonations(publicKey) { balance ->
-                val updatedCampaignData = campaignData.value.toMutableList()
-                updatedCampaignData.add(CampaignInfo(campaignName, balance ?: 0L))
-                campaignData.value = updatedCampaignData
-            }
+                // Fetch balance for each campaign
+                dappViewModel.viewTotalDonations(publicKey) { balance ->
+                    val updatedCampaignData = campaignData.value.toMutableList()
+                    updatedCampaignData.add(CampaignInfo(campaignName, balance ?: 0L, it.description))
+                    campaignData.value = updatedCampaignData
+                }
 
-            // Start polling for signatures with a coroutine for each campaign
-            scope.launch {
-                while (true) {
-                    dappViewModel.getSignaturesWithMemo(publicKey) { signatures ->
-                        // Only update if there’s a change
-                        if (signaturesData[publicKey] != signatures.take(5)) {
-                            signaturesData[publicKey] = signatures.take(5)  // Keep only last 5 signatures
+                // Start polling for signatures with a coroutine for each campaign
+                scope.launch {
+                    while (true) {
+                        dappViewModel.getSignaturesWithMemo(publicKey) { signatures ->
+                            // Only update if there’s a change
+                            if (signaturesData[publicKey] != signatures.take(5)) {
+                                signaturesData[publicKey] = signatures.take(5)  // Keep only last 5 signatures
+                            }
                         }
+                        delay(5000L)  // Polling interval
                     }
-                    delay(5000L)  // Polling interval
                 }
             }
         }
     }
-
-    val g = Brush.linearGradient(
-        listOf(
-            Color.Red,
-            Color.Yellow
-        )
-    )
 
     // UI
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
@@ -71,7 +73,8 @@ fun CampaignDetailsScreen(dappViewModel: DappViewModel = viewModel()) {
                 CampaignItem(
                     campaignName = campaign.name,
                     balance = campaign.balance,
-                    signatures = signaturesData[CampaignList.campaignList[campaign.name]] ?: emptyList()
+                    description = campaign.description,
+                    signatures = signaturesData[CampaignList.campaignList[campaign.name]?.address] ?: emptyList()
                 )
             }
         }
@@ -82,6 +85,7 @@ fun CampaignDetailsScreen(dappViewModel: DappViewModel = viewModel()) {
 fun CampaignItem(
     campaignName: String,
     balance: Long,
+    description: String,
     signatures: List<SignatureInfo>
 ) {
     val g = Brush.linearGradient(
@@ -102,6 +106,12 @@ fun CampaignItem(
             Text(
                 text = "Balance: ${balance / 1000000000} SOL",
                 style = MaterialTheme.typography.bodyMedium
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Description: $description",
+                style = MaterialTheme.typography.bodySmall
             )
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -143,11 +153,12 @@ fun SignatureItem(signatureInfo: SignatureInfo) {
 // Data class to represent each campaign information
 data class CampaignInfo(
     val name: String,
-    val balance: Long
+    val balance: Long,
+    val description: String
 )
 
 @Preview(showBackground = true)
 @Composable
 fun CampaignsDetailsScreenPreview(){
-    CampaignDetailsScreen(dappViewModel = DappViewModel())
+    CampaignDetailsScreen(dappViewModel = DappViewModel(), navController = rememberNavController())
 }
