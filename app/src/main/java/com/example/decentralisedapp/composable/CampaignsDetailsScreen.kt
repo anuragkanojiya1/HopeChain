@@ -96,6 +96,8 @@ fun CampaignItem(
     description: String,
     signatures: List<SignatureInfo>
 ) {
+
+    var campaignPublicKey = CampaignList.campaignList[campaignName]?.address
     val g = Brush.linearGradient(
         listOf(
             Color.Red,
@@ -118,6 +120,14 @@ fun CampaignItem(
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = "Balance: ${balance / 1000000000} SOL",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.White,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W400
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Public Key: $campaignPublicKey",
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.White,
                 fontSize = 16.sp,

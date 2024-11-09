@@ -124,13 +124,13 @@ fun DonationDetailsScreen(
         ) {
             Column {
                 Text(
-                    text = "$2,000,000",
+                    text = "$2000",
                     color = Color(0xFF181411),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium
                 )
                 Text(
-                    text = "Raised by 1,500 donors",
+                    text = "Raised by 1,50 donors",
                     color = Color(0xFF897361),
                     fontSize = 14.sp
                 )
@@ -150,7 +150,7 @@ fun DonationDetailsScreen(
                 horizontalArrangement = Arrangement.End
             ) {
                 Text(
-                    text = "75%",
+                    text = "15%",
                     color = Color(0xFF181411),
                     fontSize = 14.sp
                 )
@@ -170,12 +170,12 @@ fun DonationDetailsScreen(
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(4.dp))
                         .background(Color(0xFF181411))
-                        .fillMaxWidth(0.75f)
+                        .fillMaxWidth(0.15f)
                 )
             }
 
             Text(
-                text = "75% funded",
+                text = "15% funded",
                 color = Color(0xFF897361),
                 fontSize = 14.sp,
                 modifier = Modifier.padding(vertical = 8.dp)

@@ -3,6 +3,7 @@ package com.example.decentralisedapp.composable
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -76,13 +77,14 @@ fun DonationScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
+            .padding(top = 24.dp)
             .padding(4.dp)
     ) {
         // Header
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
+                .padding(vertical = 8.dp, horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -131,7 +133,7 @@ fun DonationScreen(
                         donationAmount.value = it
                     }
                 },
-                placeholder = { Text("0.00 USDC", color = Color(0xFF897361)) },
+                placeholder = { Text("0.00 SOL", color = Color(0xFF897361)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.Transparent),
@@ -216,7 +218,7 @@ fun DonationScreen(
                 .horizontalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp)
         ) {
-            listOf("USDC", "USDT", "BUSD", "SOL").forEach { currency ->
+            listOf("Helping people", "Donation is best", "Making world, a better place", "Goodwill").forEach { customMemo ->
                 Box(
                     modifier = Modifier
                         .padding(end = 8.dp)
@@ -224,10 +226,13 @@ fun DonationScreen(
                         .padding(horizontal = 16.dp, vertical = 4.dp)
                 ) {
                     Text(
-                        text = currency,
+                        text = customMemo,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
-                        color = Color(0xFF181411)
+                        color = Color(0xFF181411),
+                        modifier = Modifier.clickable(onClick = {
+                            memo.value = customMemo
+                        })
                     )
                 }
             }
