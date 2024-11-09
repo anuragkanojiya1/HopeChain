@@ -7,6 +7,7 @@
 ## Table of Contents
 
 - [Problem It Solves](#problem-it-solves)
+- [Screenshots](#screenshots)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [How It Works](#how-it-works)
@@ -27,6 +28,16 @@ Traditional donation systems often lack transparency, making it difficult for do
 - Supporting potential **Solana-token Sol** to expand access to global donors and simplify cross-border contributions.
 
 ---
+
+## Screenshots
+
+<img src="https://github.com/user-attachments/assets/356025de-a7ac-4ca9-9566-1b97228725c6" alt="Screenshot_20241109_204057" width="250"/>
+<img src="https://github.com/user-attachments/assets/e6f8278b-c1d2-4b9c-96a5-1e0887f5bc56" alt="Screenshot_20241110-012825" width="250"/>
+<img src="https://github.com/user-attachments/assets/ca6dbd11-0650-46e8-95f2-cafdd20ef85c" alt="Screenshot_20241109_204323" width="250"/>
+<img src="https://github.com/user-attachments/assets/84c876be-700e-460f-a76e-68a10395aa36" alt="Screenshot_20241109_204334-min" width="250"/>
+<img src="https://github.com/user-attachments/assets/61f0ea86-9b91-4b37-9b12-ec9a45aa02e8" alt="Screenshot_20241109_204349" width="250"/>
+<img src="https://github.com/user-attachments/assets/f39b5dd1-13bb-4df6-941a-e2919fa7841e" alt="Screenshot_20241110-012938" width="250"/>
+<img src="https://github.com/user-attachments/assets/2bfdb5ab-4bc9-42b0-a6b2-60690fcbc6b8" alt="Screenshot_20241109_204602" width="250"/>
 
 ## Features
 
@@ -74,6 +85,13 @@ Traditional donation systems often lack transparency, making it difficult for do
 ---
 
 ## Setup and Installation
+
+### 1. Using Apk
+
+- Download and test it directly on your physical android device. Click here to download : [app-debug.zip](https://github.com/user-attachments/files/17689252/app-debug.zip)
+- You will then find this apk in your file manager's - Install packages or any other folder where your third-party apks are stored when downloaded.
+
+### 2. Using Android Studio
 
 ### Prerequisites
 - Android Studio
@@ -125,8 +143,6 @@ Contributions are welcome! If you want to help make HopeChain even better, pleas
 2. **Create a Branch**: Make a new branch for your feature or bug fix.
 3. **Commit Changes**: Add detailed commit messages to describe your changes.
 4. **Submit a Pull Request**: Open a pull request and describe the modifications you've made.
-
-For detailed contributing guidelines, see **CONTRIBUTING.md**.
 
 ---
 
