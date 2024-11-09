@@ -1,18 +1,25 @@
 package com.example.decentralisedapp.composable
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -64,7 +71,8 @@ fun CampaignDetailsScreen(dappViewModel: DappViewModel, navController: NavContro
         Text(
             text = "Campaign Details",
             style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier.align(Alignment.Start),
+            fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -98,34 +106,42 @@ fun CampaignItem(
         modifier = Modifier.fillMaxWidth().padding(8.dp),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Column(modifier = Modifier.background(g)) {
+        Column(modifier = Modifier.background(Color(0xFFEC7113)).padding(8.dp)) {
             Text(
                 text = "Campaign: $campaignName",
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                color = Color.White,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.W400,
+                fontFamily = FontFamily.Serif
             )
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = "Balance: ${balance / 1000000000} SOL",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.White,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W400
             )
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = "Description: $description",
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.White,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W400
             )
             Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "Signatures:",
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
 
             if (signatures.isEmpty()) {
                 Text(
                     text = "No signatures available",
                     style = MaterialTheme.typography.bodySmall,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    color = Color.White,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.W400
                 )
             } else {
                 signatures.forEach { signatureInfo ->
@@ -138,14 +154,24 @@ fun CampaignItem(
 
 @Composable
 fun SignatureItem(signatureInfo: SignatureInfo) {
-    Column(modifier = Modifier.padding(vertical = 4.dp)) {
+    Column(modifier = Modifier.padding(vertical = 4.dp)
+        .border(border = BorderStroke(1.dp, color = Color.White), shape = RoundedCornerShape(12.dp))
+    ) {
         Text(
             text = "Signature: ${signatureInfo.signature}",
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.White,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.W400,
+            modifier = Modifier.padding(8.dp)
         )
         Text(
             text = "Memo: ${signatureInfo.memo ?: "No memo"}",
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.White,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.W400,
+            modifier = Modifier.padding(8.dp)
         )
     }
 }
