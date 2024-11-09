@@ -1,7 +1,8 @@
-package com.example.decentralisedapp
+package com.example.decentralisedapp.viewmodels
 
 import android.net.Uri
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.portto.solana.web3.Connection
@@ -10,10 +11,7 @@ import com.portto.solana.web3.SerializeConfig
 import com.portto.solana.web3.Transaction
 import com.portto.solana.web3.programs.MemoProgram
 import com.portto.solana.web3.programs.SystemProgram
-import com.portto.solana.web3.rpc.types.AccountInfoRpcResult
-import com.portto.solana.web3.rpc.types.RpcResultObject
 import com.portto.solana.web3.rpc.types.config.Commitment
-import com.portto.solana.web3.rpc.types.config.Finality
 import com.portto.solana.web3.util.Cluster
 import com.solana.mobilewalletadapter.clientlib.ActivityResultSender
 import com.solana.mobilewalletadapter.clientlib.MobileWalletAdapter
@@ -21,15 +19,12 @@ import com.solana.mobilewalletadapter.clientlib.MobileWalletAdapter.Companion.TA
 import com.solana.mobilewalletadapter.clientlib.RpcCluster
 import com.solana.mobilewalletadapter.clientlib.TransactionResult
 import com.solana.mobilewalletadapter.clientlib.successPayload
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import org.bitcoinj.core.Base58
 
 data class SnapViewState(
@@ -163,6 +158,7 @@ class SnapViewModel: ViewModel() {
     fun sendSol(
         recipientAddress: String,
         amountInSol: Double,
+        memo: String,
         identityUri: Uri,
         iconUri: Uri,
         identityName: String,
@@ -185,7 +181,7 @@ class SnapViewModel: ViewModel() {
                         toPublicKey = PublicKey(recipientAddress),
                         lamports = lamports
                     ),
-                    MemoProgram.writeUtf8(PublicKey(_state.value.userAddress), "Hello Sir")
+                    MemoProgram.writeUtf8(PublicKey(_state.value.userAddress), memo)
                 )
                 tx.setRecentBlockHash(blockHash!!)
                 tx.feePayer = PublicKey(_state.value.userAddress)
@@ -213,64 +209,64 @@ class SnapViewModel: ViewModel() {
         }
     }
 
-    fun viewAccountinfo(recepientAddress: String) {
-
-        CoroutineScope(Dispatchers.IO).launch {
-            Log.d(
-                "AccountInfo:",
-                api.getBalance(PublicKey(recepientAddress)).toString()
-            )
-            Log.d("AccountInfo", api.getProgramAccounts(MemoProgram.PROGRAM_ID).toString())
-            
-        }
-    }
-
-    // Account Information Retrieval
-    fun getAccountInformation1(accountPublicKey: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val accountInfo = api.getBalanceAndContext(PublicKey(accountPublicKey)).context.slot
-                Log.d("AccountInfo", "Info for $accountPublicKey: ${accountInfo}")
-            } catch (e: Exception) {
-                Log.e("Error", "Failed to retrieve account info: ${e.message}")
-            }
-        }
-    }
-    // Account Information Retrieval
-    fun getAccountInformation2(accountPublicKey: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-                val slot = api.getBalanceAndContext(PublicKey(accountPublicKey)).context.slot
-                val block = api.getBlock(338221956)
-                val signature = api.getBlockSignatures(slot)
-                val signatureForAddress = api.getSignaturesForAddress(
-                    PublicKey(accountPublicKey.toByteArray()),
-                    null,
-                    Finality.FINALIZED
-                    )
-                Log.d("AccountInfo", "Info for $accountPublicKey: ${signature}")
-                Log.d("Sign Address", "${signatureForAddress}")
-                Log.d("Block:", "${block?.transactions?.get(0)?.transaction?.signatures?.get(0)}")
-        }
-    }
-
-    fun getAccountInformation3(accountPublicKey: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-                val slot = api.getBalanceAndContext(PublicKey(accountPublicKey)).context.slot
-                val block = api.getBlock(338221956)
-                val signature = api.getBlockSignatures(slot)
-            val signatureForAddress = api.getSignaturesForAddress(
-                PublicKey(accountPublicKey),
-                null,
-                Finality.FINALIZED
-            )
-
-            Log.d("AccountInfo", "Info for $accountPublicKey: ${signature}")
-            Log.d("Sign Address", "${signatureForAddress.get(1).signature}")
-            Log.d("Sign Address sign", "${signatureForAddress.get(0).signature}")
-            Log.d("Sign Address sign memo", "${signatureForAddress.get(0).memo}")
-            //    Log.d("Block:", "${block?.transactions}")
-        }
-    }
+//    fun viewAccountinfo(recepientAddress: String) {
+//
+//        CoroutineScope(Dispatchers.IO).launch {
+//            Log.d(
+//                "AccountInfo:",
+//                api.getBalance(PublicKey(recepientAddress)).toString()
+//            )
+//            Log.d("AccountInfo", api.getProgramAccounts(MemoProgram.PROGRAM_ID).toString())
+//
+//        }
+//    }
+//
+//    // Account Information Retrieval
+//    fun getAccountInformation1(accountPublicKey: String) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            try {
+//                val accountInfo = api.getBalanceAndContext(PublicKey(accountPublicKey)).context.slot
+//                Log.d("AccountInfo", "Info for $accountPublicKey: ${accountInfo}")
+//            } catch (e: Exception) {
+//                Log.e("Error", "Failed to retrieve account info: ${e.message}")
+//            }
+//        }
+//    }
+//    // Account Information Retrieval
+//    fun getAccountInformation2(accountPublicKey: String) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//                val slot = api.getBalanceAndContext(PublicKey(accountPublicKey)).context.slot
+//                val block = api.getBlock(338221956)
+//                val signature = api.getBlockSignatures(slot)
+//                val signatureForAddress = api.getSignaturesForAddress(
+//                    PublicKey(accountPublicKey.toByteArray()),
+//                    null,
+//                    Finality.FINALIZED
+//                    )
+//                Log.d("AccountInfo", "Info for $accountPublicKey: ${signature}")
+//                Log.d("Sign Address", "${signatureForAddress}")
+//                Log.d("Block:", "${block?.transactions?.get(0)?.transaction?.signatures?.get(0)}")
+//        }
+//    }
+//
+//    fun getAccountInformation3(accountPublicKey: String) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//                val slot = api.getBalanceAndContext(PublicKey(accountPublicKey)).context.slot
+//                val block = api.getBlock(338221956)
+//                val signature = api.getBlockSignatures(slot)
+//            val signatureForAddress = api.getSignaturesForAddress(
+//                PublicKey(accountPublicKey),
+//                null,
+//                Finality.FINALIZED
+//            )
+//
+//            Log.d("AccountInfo", "Info for $accountPublicKey: ${signature}")
+//            Log.d("Sign Address", "${signatureForAddress.get(1).signature}")
+//            Log.d("Sign Address sign", "${signatureForAddress.get(0).signature}")
+//            Log.d("Sign Address sign memo", "${signatureForAddress.get(0).memo}")
+//            //    Log.d("Block:", "${block?.transactions}")
+//        }
+//    }
 
     fun ViewTotalDonations(campaignPublicKey: String) {
         viewModelScope.launch(Dispatchers.IO) {

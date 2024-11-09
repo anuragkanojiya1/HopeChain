@@ -1,5 +1,6 @@
 package com.example.decentralisedapp.composable
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -36,9 +37,15 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.decentralisedapp.R
 import com.example.decentralisedapp.navigation.Screen
+import com.solana.mobilewalletadapter.clientlib.ActivityResultSender
 
 @Composable
-fun DonationDetailsScreen(navController: NavController) {
+fun DonationDetailsScreen(
+    identityUri: Uri,
+    iconUri: Uri,
+    identityName: String,
+    activityResultSender: ActivityResultSender,
+    navController: NavController) {
 
     val campaignInfoArgs = navController.currentBackStackEntry?.arguments
     val title = campaignInfoArgs?.getString("title") ?: ""
@@ -70,12 +77,12 @@ fun DonationDetailsScreen(navController: NavController) {
 
         // Image
         Image(
-            painter = painterResource(R.drawable.ic_launcher_background),
+            painter = painterResource(R.drawable.puppies),
             contentDescription = "Ocean Cleanup",
             modifier = Modifier
                 .fillMaxWidth()
                 .height(218.dp)
-                .clip(RoundedCornerShape(8.dp))
+                .clip(RoundedCornerShape(16.dp))
                 .background(Color.White),
             contentScale = ContentScale.Crop
         )
@@ -201,5 +208,5 @@ fun DonationDetailsScreen(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 fun DonationDetailsScreenPreview(){
-    DonationDetailsScreen(navController = rememberNavController())
+ //   DonationDetailsScreen(navController = rememberNavController())
 }

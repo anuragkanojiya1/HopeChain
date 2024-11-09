@@ -1,5 +1,6 @@
 package com.example.decentralisedapp.composable
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -34,9 +37,16 @@ import androidx.navigation.compose.rememberNavController
 import com.example.decentralisedapp.CampaignList
 import com.example.decentralisedapp.navigation.Screen
 import com.example.decentralisedapp.viewmodels.DappViewModel
+import com.solana.mobilewalletadapter.clientlib.ActivityResultSender
 
 @Composable
-fun CampaignScreen(navController: NavController, dappViewModel: DappViewModel) {
+fun CampaignScreen(
+    identityUri: Uri,
+    iconUri: Uri,
+    identityName: String,
+    activityResultSender: ActivityResultSender,
+    navController: NavController,
+    dappViewModel: DappViewModel) {
     val campaignData = remember { mutableStateOf<List<CampaignInfo>>(emptyList()) }
 
     LaunchedEffect(Unit) {
@@ -61,6 +71,7 @@ fun CampaignScreen(navController: NavController, dappViewModel: DappViewModel) {
             .fillMaxSize()
             .background(Color.White)
             .padding(16.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         Text(
             text = "Donate",
@@ -141,7 +152,7 @@ fun CampaignItem(
 
             // Show the total donation balance
             Text(
-                text = "Total Donations: $balance",
+                text = "Total Donations: ${balance/1000000000} SOL",
                 color = Color(0xFF181411),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium
@@ -170,5 +181,5 @@ fun CampaignItem(
 @Preview(showBackground = true)
 @Composable
 fun CampaignScreenPreview(){
-    CampaignScreen(navController = rememberNavController(), dappViewModel = DappViewModel())
+  //  CampaignScreen(navController = rememberNavController(), dappViewModel = DappViewModel())
 }

@@ -6,17 +6,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.decentralisedapp.composable.CampaignDetailsScreen
+import com.example.decentralisedapp.composable.HomeScreen
+import com.example.decentralisedapp.composable.MainScreen2
+import com.example.decentralisedapp.navigation.NavGraph
 import com.example.decentralisedapp.ui.theme.DecentralisedAppTheme
-import com.portto.solana.web3.PublicKey
+import com.example.decentralisedapp.viewmodels.DappViewModel
+import com.example.decentralisedapp.viewmodels.SnapViewModel
 import com.solana.mobilewalletadapter.clientlib.ActivityResultSender
 
 class MainActivity : ComponentActivity() {
 
+    private lateinit var navController : NavController
     private val snapViewModel: SnapViewModel by viewModels()
     private val dappViewModel: DappViewModel by viewModels()
 
@@ -33,23 +37,9 @@ class MainActivity : ComponentActivity() {
         dappViewModel.startSignaturePolling(accountPublicKey)
 
         setContent {
-            DecentralisedAppTheme {
-
-                CampaignDetailsScreen(dappViewModel)
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colorScheme.background
-//                ) {
-//                    MainScreen(
-//                        identityUri = identityUri,
-//                        iconUri = iconUri,
-//                        identityName = identityName,
-//                        activityResultSender = activityResultSender,
-//                        snapViewModel = snapViewModel,
-//                        dappViewModel = dappViewModel
-//                    )
-//                }
-            }
+            val navController = rememberNavController()
+        //    x(identityUri, iconUri, identityName, activityResultSender, snapViewModel, dappViewModel)
+            NavGraph(identityUri, iconUri, identityName, activityResultSender, navController, dappViewModel, snapViewModel)
         }
     }
 
@@ -61,3 +51,14 @@ class MainActivity : ComponentActivity() {
 }
 
 
+@Composable
+fun x(
+    identityUri: Uri,
+    iconUri: Uri,
+    identityName: String,
+    activityResultSender: ActivityResultSender,
+    snapViewModel: SnapViewModel,
+    dappViewModel: DappViewModel
+){
+    MainScreen(identityUri, iconUri, identityName, activityResultSender, snapViewModel, dappViewModel)
+}

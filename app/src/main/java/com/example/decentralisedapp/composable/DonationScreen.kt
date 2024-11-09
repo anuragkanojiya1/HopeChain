@@ -1,5 +1,7 @@
-package com.example.decentralisedapp
+package com.example.decentralisedapp.composable
 
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -21,14 +23,17 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -36,10 +41,37 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.decentralisedapp.CampaignList
+import com.example.decentralisedapp.R
+import com.example.decentralisedapp.viewmodels.SnapViewModel
+import com.solana.mobilewalletadapter.clientlib.ActivityResultSender
+import org.checkerframework.checker.units.qual.Length
+import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DonationScreen() {
+fun DonationScreen(
+    identityUri: Uri,
+    iconUri: Uri,
+    identityName: String,
+    activityResultSender: ActivityResultSender,
+    navController: NavController, snapViewModel: SnapViewModel) {
+
+    val campaignInfoArgs = navController.currentBackStackEntry?.arguments
+    val title = campaignInfoArgs?.getString("title") ?: ""
+    val balance = campaignInfoArgs?.getLong("balance") ?: 0L
+    val description = campaignInfoArgs?.getString("description") ?: ""
+
+    val campaignAddress = CampaignList.campaignList[title]?.address
+
+    var memo = remember { mutableStateOf("") }
+    var donationAmount = remember { mutableStateOf("") }
+    val viewState = snapViewModel.viewState.collectAsState()
+
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -61,7 +93,7 @@ fun DonationScreen() {
                 modifier = Modifier.size(24.dp)
             )
             Text(
-                text = "Donate to Ukraine",
+                text = title,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF181411),
@@ -93,8 +125,12 @@ fun DonationScreen() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             TextField(
-                value = "",
-                onValueChange = {},
+                value = donationAmount.value,
+                onValueChange = {
+                    if (it.isEmpty() || it.toDoubleOrNull() != null) {
+                        donationAmount.value = it
+                    }
+                },
                 placeholder = { Text("0.00 USDC", color = Color(0xFF897361)) },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -108,6 +144,7 @@ fun DonationScreen() {
                 textStyle = TextStyle(fontSize = 18.sp),
                // trailingIcon =
             )
+
             Icon(
                 painter = painterResource(id = R.drawable.ic_launcher_background), // Replace with your dollar icon
                 contentDescription = null,
@@ -136,8 +173,10 @@ fun DonationScreen() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             TextField(
-                value = "",
-                onValueChange = {},
+                value = memo.value,
+                onValueChange = {
+                    memo.value = it
+                },
                 placeholder = { Text("Create a Memo", color = Color(0xFF897361)) },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -196,9 +235,25 @@ fun DonationScreen() {
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Donate Button
         Button(
-            onClick = { /* Handle donation */ },
+            onClick = {
+                val amount = donationAmount.value.toDoubleOrNull() ?: 0.1
+                if (viewState.value.userAddress.isEmpty()){
+                    snapViewModel.connect(identityUri, iconUri, identityName, activityResultSender)
+                    Toast.makeText(context, "Connect to Wallet First", Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    snapViewModel.sendSol(
+                        campaignAddress.toString(),
+                        amount,
+                        memo.value,
+                        identityUri,
+                        iconUri,
+                        identityName,
+                        activityResultSender,
+                    )
+                }
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEC7113)),
             modifier = Modifier
                 .padding(16.dp)
@@ -221,5 +276,5 @@ fun DonationScreen() {
 @Preview(showBackground = true)
 @Composable
 fun dsPreview(){
-    DonationScreen()
+ //   DonationScreen(navController = rememberNavController(), SnapViewModel())
 }

@@ -1,8 +1,9 @@
-package com.example.decentralisedapp
+package com.example.decentralisedapp.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.decentralisedapp.SignatureInfo
 import com.portto.solana.web3.Connection
 import com.portto.solana.web3.PublicKey
 import com.portto.solana.web3.rpc.types.config.Finality
@@ -46,8 +47,8 @@ class DappViewModel : ViewModel() {
 
     fun getAccountInformation3(accountPublicKey: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val slot = api.getBalanceAndContext(PublicKey(accountPublicKey)).context.slot
-            val signature = api.getBlockSignatures(slot)
+//            val slot = api.getBalanceAndContext(PublicKey(accountPublicKey)).context.slot
+//            val signature = api.getBlockSignatures(slot)
             val signatureForAddress = api.getSignaturesForAddress(
                 PublicKey(accountPublicKey),
                 null,

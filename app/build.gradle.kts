@@ -69,4 +69,6 @@ dependencies {
     implementation("com.solanamobile:mobile-wallet-adapter-clientlib-ktx:1.1.0")
     implementation ("com.portto.solana:web3:0.1.3")
 
-}
+    val nav_version = "2.7.7"
+
+    implementation("androidx.navigation:navigation-compose:$nav_version")}
