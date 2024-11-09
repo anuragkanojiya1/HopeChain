@@ -62,6 +62,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
+    implementation("io.coil-kt.coil3:coil-compose:3.0.1")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.1")
+    
     implementation ("org.bitcoinj:bitcoinj-core:0.16.2")
     implementation("com.solanamobile:mobile-wallet-adapter-clientlib-ktx:1.1.0")
     implementation ("com.portto.solana:web3:0.1.3")

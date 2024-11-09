@@ -1,5 +1,6 @@
 package com.example.decentralisedapp
 
+import androidx.compose.foundation.background
 import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -7,7 +8,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
@@ -46,6 +50,13 @@ fun CampaignDetailsScreen(dappViewModel: DappViewModel = viewModel()) {
         }
     }
 
+    val g = Brush.linearGradient(
+        listOf(
+            Color.Red,
+            Color.Yellow
+        )
+    )
+
     // UI
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text(
@@ -73,11 +84,17 @@ fun CampaignItem(
     balance: Long,
     signatures: List<SignatureInfo>
 ) {
+    val g = Brush.linearGradient(
+        listOf(
+            Color.Red,
+            Color.Yellow
+        )
+    )
     Card(
         modifier = Modifier.fillMaxWidth().padding(8.dp),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.background(g)) {
             Text(
                 text = "Campaign: $campaignName",
                 style = MaterialTheme.typography.bodyLarge
@@ -128,3 +145,9 @@ data class CampaignInfo(
     val name: String,
     val balance: Long
 )
+
+@Preview(showBackground = true)
+@Composable
+fun CampaignsDetailsScreenPreview(){
+    CampaignDetailsScreen(dappViewModel = DappViewModel())
+}
