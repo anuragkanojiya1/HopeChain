@@ -88,7 +88,7 @@ Traditional donation systems often lack transparency, making it difficult for do
 
 ### 1. Using Apk
 
-- Download and test it directly on your physical android device. Click here to download : [app-debug.zip](https://github.com/user-attachments/files/17689252/app-debug.zip)
+- Download and test it directly on your physical android device. Click here to download : [app-debug.zip](https://github.com/user-attachments/files/18462793/app-debug.zip)
 - You will then find this apk in your file manager's - Install packages or any other folder where your third-party apks are stored when downloaded.
 - You should have solflare wallet installed in your Android device to connect your wallet account with the app.
 
