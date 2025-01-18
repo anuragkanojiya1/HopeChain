@@ -159,7 +159,7 @@ fun HomeScreen(
                     } else {
                         "Wallet not connected."
                     },
-                    color = if (viewState.userAddress.isNotEmpty()) Color.Green else Color.Gray,
+                    color = if (viewState.userAddress.isNotEmpty()) Color.Blue else Color.Gray,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
             }

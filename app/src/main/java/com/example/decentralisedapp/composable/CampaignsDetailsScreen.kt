@@ -96,7 +96,17 @@ fun CampaignItem(
     description: String,
     signatures: List<SignatureInfo>
 ) {
-
+    val gradient = Brush.linearGradient(
+        listOf(
+//            Color(0xFFF7C096),
+            Color(0xFFF77D20),
+            Color(0xFFCA5D0A),
+            Color(0xFF9E4706),
+            //    Color(0xFF632B00),
+//            Color(0xFFF2A062),
+//            Color(0xFFEC7113)
+        )
+    )
     var campaignPublicKey = CampaignList.campaignList[campaignName]?.address
     val g = Brush.linearGradient(
         listOf(
@@ -108,7 +118,7 @@ fun CampaignItem(
         modifier = Modifier.fillMaxWidth().padding(8.dp),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Column(modifier = Modifier.background(Color(0xFFEC7113)).padding(8.dp)) {
+        Column(modifier = Modifier.background(gradient).padding(8.dp)) {
             Text(
                 text = "Campaign: $campaignName",
                 style = MaterialTheme.typography.bodyLarge,
